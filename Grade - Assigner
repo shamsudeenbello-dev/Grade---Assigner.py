@@ -1,0 +1,64 @@
+def prompt_int_in_range(prompt, min_val=None, max_val=None):
+    """
+    Prompt until user enters a valid integer (optionally within [min_val, max_val]).
+    Returns the integer.
+    """
+    while True:
+        s = input(prompt)
+        try:
+            value = int(s)
+        except ValueError:
+            print("Please enter a valid whole number (e.g. 87).")
+            continue
+        if min_val is not None and value < min_val or max_val is not None and value > max_val:
+            range_msg = []
+            if min_val is not None:
+                range_msg.append(f"≥ {min_val}")
+            if max_val is not None:
+                range_msg.append(f"≤ {max_val}")
+            print(f"Please enter a value {' and '.join(range_msg)}.")
+            continue
+        return value
+
+
+def assign_grade(score):
+    """Simple A-F scale based on numeric score."""
+    if score >= 75:
+        return "A"
+    if score >= 63:
+        return "B"
+    if score >= 55:
+        return "C"
+    if score >= 49:
+        return "D"
+    if score >=39:
+        return "E"
+    return "F"
+
+
+def main():
+    print("="*40)
+    print("EXAM GRADE ASSIGNING SYSTEM")
+    print("="*40, "\n")
+
+    user_name = input("Please input your name: ").strip() or "Student"
+    print(f"\nWelcome, {user_name}!\n")
+
+    # ask for the candidate score and validate it's between 0 and 100
+    cand_score = prompt_int_in_range("Input your score here (0-100): ", min_val=0, max_val=100)
+
+    # keep prompting for confirmation until it matches
+    while True:
+        confirmed = prompt_int_in_range("Re-enter your score here: ", min_val=0, max_val=100)
+        if confirmed != cand_score:
+            print("Error: both inputs don't match. Please try again.\n")
+        else:
+            break
+
+    print(f"\nScore confirmed: {cand_score}")
+    grade = assign_grade(cand_score)
+    print(f"{user_name}, your assigned grade is: {grade}")
+
+
+if __name__ == "__main__":
+    main()
